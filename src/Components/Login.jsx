@@ -107,12 +107,13 @@ const Login = ({ onLogin, switchToSignup }) => {
                   <span className="font-semibold ml-1"> Sign up</span>
                 </button>
 
-                <a
-                  href="#"
+                <button
+                  type="button"
+                  onClick={() => alert("Forgot Password clicked")}
                   className="underline hover:text-yellow-600 transition duration-200"
                 >
                   Forgot Password
-                </a>
+                </button>
               </div>
             </div>
           </div>
