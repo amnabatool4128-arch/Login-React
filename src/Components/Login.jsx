@@ -109,7 +109,7 @@ const Login = ({ onLogin, switchToSignup }) => {
 
                 <button
                   type="button"
-                  onClick={() => alert("Forgot Password clicked")}
+                  onClick={() => alert("Forgot Password clicked")} // or leave empty if no action yet
                   className="underline hover:text-yellow-600 transition duration-200"
                 >
                   Forgot Password
