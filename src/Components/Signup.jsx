@@ -125,7 +125,8 @@ const Signup = ({ onSignUp,switchToLogin }) => {
 
               {/* Links */}
               <div className="flex flex-col sm:flex-row items-center justify-between mt-10 text-sm text-gray-600">
-                <button onClick={switchToLogin}
+                <button
+                  onClick={switchToLogin}
                   type="button"
                   className="hover:text-yellow-600 transition duration-200 mb-2 sm:mb-0 cursor-pointer"
                 >
@@ -133,12 +134,13 @@ const Signup = ({ onSignUp,switchToLogin }) => {
                   <span className="font-semibold ml-1"> Sign in</span>
                 </button>
 
-                <a
-                  href="#"
+                <button
+                  type="button"
+                  onClick={() => {}}
                   className="underline hover:text-yellow-600 transition duration-200"
                 >
                   Forgot Password
-                </a>
+                </button>
               </div>
             </div>
           </div>
