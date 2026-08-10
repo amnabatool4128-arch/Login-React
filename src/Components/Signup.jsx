@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { assets } from "../assets/assets";
+import axios from "axios";
 
-const Signup = ({ onSignUp,switchToLogin }) => {
+const Signup = ({ onSignUp, switchToLogin }) => {
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -15,16 +16,34 @@ const Signup = ({ onSignUp,switchToLogin }) => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (formData.fullName && formData.email && formData.password) {
-      onSignUp(formData);
-    } else {
+    if (!formData.fullName || !formData.email || !formData.password) {
       alert("Please fill all the fields");
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/auth/signup",
+        formData,
+      );
+
+      if (response.data.success) {
+        alert("Account created successfully!");
+        onSignUp(response.data.user);
+      }
+    } catch (error) {
+      console.error("Signup error:", error);
+
+      if (error.response) {
+        alert(error.response.data.message);
+      } else {
+        alert("Unable to connect to server");
+      }
     }
   };
-
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
       <div className="w-full max-w-6xl mx-auto bg-gradient-to-b from-white via-gray-100 to-yellow-100 rounded-2xl overflow-hidden">

@@ -1,11 +1,49 @@
 import React, { useState } from "react";
 import { assets } from "../assets/assets";
+import axios from "axios";
 
 const Login = ({ onLogin, switchToSignup }) => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+
+  const handleGoogleResponse = async (response) => {
+    console.log("Google response:", response);
+
+    try {
+      const result = await axios.post("http://localhost:5000/api/auth/google", {
+        credential: response.credential,
+      });
+
+      if (result.data.success) {
+        alert("Google Login successful!");
+        onLogin(result.data.user);
+      }
+    } catch (error) {
+      console.error("Google Login error:", error);
+
+      if (error.response) {
+        alert(error.response.data.message);
+      } else {
+        alert("Unable to connect to server");
+      }
+    }
+  };
+
+  const handleGoogleLogin = () => {
+    if (!window.google) {
+      alert("Google Login is not loaded yet");
+      return;
+    }
+
+    window.google.accounts.id.initialize({
+      client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
+      callback: handleGoogleResponse,
+    });
+
+    window.google.accounts.id.prompt();
+  };
 
   const handleChange = (e) => {
     setFormData({
@@ -14,13 +52,35 @@ const Login = ({ onLogin, switchToSignup }) => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (formData.email && formData.password) {
-      onLogin(formData.email, formData.password)
-    } 
-    else {
+
+    if (!formData.email || !formData.password) {
       alert("Please fill all the fields");
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/auth/login",
+        {
+          email: formData.email,
+          password: formData.password,
+        },
+      );
+
+      if (response.data.success) {
+        alert("Login successful!");
+        onLogin(response.data.user);
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+
+      if (error.response) {
+        alert(error.response.data.message);
+      } else {
+        alert("Unable to connect to server");
+      }
     }
   };
 
@@ -87,7 +147,11 @@ const Login = ({ onLogin, switchToSignup }) => {
                   Apple
                 </button>
 
-                <button className="w-1/2 px-6 py-3 bg-white font-semibold border border-gray-300 text-gray-900 rounded-full cursor-pointer flex items-center justify-center gap-2">
+                <button
+                  type="button"
+                  onClick={handleGoogleLogin}
+                  className="w-1/2 px-6 py-3 bg-white font-semibold border border-gray-300 text-gray-900 rounded-full cursor-pointer flex items-center justify-center gap-2"
+                >
                   <img
                     src={assets.googleImg}
                     alt="google"
