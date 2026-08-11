@@ -127,6 +127,7 @@ const Login = ({ onLogin, switchToSignup }) => {
                     className="w-full px-6 py-3 bg-white rounded-full border border-gray-300 outline-none placeholder:text-sm placeholder:text-gray-600"
                     placeholder="Password"
                     type="password"
+                    autoComplete="current-password"
                   />
                 </div>
 
